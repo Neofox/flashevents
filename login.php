@@ -51,7 +51,6 @@
         </script>
     </head>
     <body class="login">
-    <?php include_once 'header.php'; ?>
         <div class="container ui center aligned">
             <form class="ui form" action="http://flashevents.flash-global.net/backend/login" data-redirection="map.html" method="POST">
                 <div class="message"></div>

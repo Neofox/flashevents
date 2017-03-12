@@ -1,10 +1,8 @@
 <div id="header">
     <label for="menuToggle">
-        <span>Event</span>
-        <span>Map</span>
-        <span>User</span>
-        <span>Friends</span>
-        <span>Transport</span>
+        <span></span>
+        <span></span>
+        <span></span>
     </label>
 </div>
 <input id="menuToggle" class="hidden" type="checkbox" />
