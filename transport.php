@@ -79,14 +79,14 @@
         <div class="col-md-12" style="text-align:center;">
             <div style="display: inline-block;">
                 <div class="progress progress-bar-vertical">
-                    <i class="icon-dashboard"></i>
+                    <i class="fa fa-tachometer"></i>
                     <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="height: 30%;">
                         <span class="sr-only">30% Complete</span>
                     </div>
                 </div>
                 <img class="map" alt="map" src="images/gmaps.png" style="vertical-align: top;"/>
                 <div class="progress progress-bar-vertical">
-                    <i class="icon-sun"></i>
+                    <i class="fa fa-sun-o"></i>
                     <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="height: 70%;">
                         <span class="sr-only">70% Complete</span>
                     </div>
