@@ -10,7 +10,6 @@
         <script src="semantic/dist/semantic.min.js" type="text/javascript"></script>
         <script type="text/javascript">
             $(document).ready(function(){
-
                 function getQueryParams() {
 
                     var query = document.location.search;
@@ -33,10 +32,9 @@
                     type: 'get',
                     data: getParameters
                 }).fail(function(result) {
-
-                }).
-                }done(function(result){
-
+                    return false;
+                }).done(function(result){
+                    return false;
                 });
 
             });

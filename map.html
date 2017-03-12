@@ -320,7 +320,7 @@
                 MAPFILES_URL: "http://maps.gstatic.com/intl/en_us/mapfiles/",
                 zoomFactor : 9,
                 draggable: false,
-                mapCenter: false,
+                mapCenter: false
                 //mapCenter : {latitude : 49.611622, longitude : 6.131935}//Lux-city//todo make it work from there
             };
             var gmi;
@@ -332,6 +332,37 @@
                     loadEvents();
                 });
             })(document.getElementById("map"), addresses, gmiConfig, GoogleMapsInit, GoogleMapsIntegration, loadEvents);
+
+            function generateDescription(event) {
+                // TODO move this template function to an external file
+                var eventFragment = document.createDocumentFragment();
+                var div = document.createElement('span');
+                div.className = 'marker_info_window';
+                if (event.picture) {
+                    console.log(event.picture);
+                    var pic = document.createElement('img');
+                    pic.setAttribute('src', decodeURIComponent(event.src));
+                    pic.setAttribute('alt' ,event.name || '');
+                    div.appendChild(pic);
+                }
+                if (event.eventLink) {
+                    var anchor = document.createElement('A');
+                    anchor.setAttribute('href', event.eventLink);
+                    anchor.textContent = event.name || event.eventLink;
+                    div.appendChild(document.createElement('h3').appendChild(anchor))
+                }
+                if (event.description) {
+                    var paragraph = document.createElement('span');
+                    paragraph.insertAdjacentHTML('beforeend', event.description);
+                    div.appendChild(paragraph);
+                }
+                eventFragment.appendChild(div);
+                if (event.picture) {
+                    console.log(eventFragment);
+                }
+
+                return div;//infowindow not friend with Fragments
+            }
 
             var loadEvents = function(params) {
                 $.get({
@@ -348,13 +379,15 @@
                         var data = [];
                         for (var i = 0; i < window.events.length - 1; i++) {
                             var event = window.events[i];
-                            data.push({
-                                'title' : event.description || event.name ,
-                                'infoWindowTitle' : event.description || event.name,
+                            var infoWindowTitle = event.description.substr()
+;                            data.push({
+                                'title' : '',//event.description || event.name ,
+                                'infoWindowTitle' : generateDescription(event),//event.description || event.name,
                                 'address' : event.address || undefined,
                                 'lat' : typeof event.address.latitude !== "undefined" ?  event.address.latitude : undefined,
                                 'lng' : typeof event.address.longitude !== "undefined" ?  event.address.longitude : undefined
                             });
+
                         }
                         if (data.length) {
                             gmi.clearMap();
