@@ -336,14 +336,14 @@
             function generateDescription(event) {
                 // TODO move this template function to an external file
                 var eventFragment = document.createDocumentFragment();
-                var div = document.createElement('span');
+                var div = document.createElement('div');
                 div.className = 'marker_info_window';
                 if (event.picture) {
                     console.log(event.picture);
                     var pic = document.createElement('img');
                     pic.setAttribute('src', decodeURIComponent(event.src));
-                    pic.setAttribute('alt' ,event.name || '');
-                    div.appendChild(pic);
+                    pic.setAttribute('alt', event.name || '');
+                    div.appendChild(document.createElement('div').appendChild(pic));
                 }
                 if (event.eventLink) {
                     var anchor = document.createElement('A');
@@ -352,7 +352,7 @@
                     div.appendChild(document.createElement('h3').appendChild(anchor))
                 }
                 if (event.description) {
-                    var paragraph = document.createElement('span');
+                    var paragraph = document.createElement('div');
                     paragraph.insertAdjacentHTML('beforeend', event.description);
                     div.appendChild(paragraph);
                 }
@@ -361,7 +361,7 @@
                     console.log(eventFragment);
                 }
 
-                return div;//infowindow not friend with Fragments
+                return eventFragment;
             }
 
             var loadEvents = function(params) {
