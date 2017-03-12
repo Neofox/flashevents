@@ -36,29 +36,8 @@
     </style>
 </head>
 <body>
+<?php include_once 'header.php'; ?>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                        <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-                    </button> <a class="navbar-brand" href="#">LOGO</a>
-                </div>
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <form class="navbar-form navbar-left" role="search">
-                        <div class="form-group">
-                            <input type="text" class="form-control" />
-                        </div>
-                        <button type="submit" class="btn btn-default">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </form>
-                </div>
-            </nav>
-        </div>
-    </div>
-    <br /><br />
     <div class="row">
         <div class="row">
             <div class="col-md-12" style="text-align:center;">
