@@ -9,6 +9,7 @@
         <script src="semantic/dist/semantic.min.js" type="text/javascript"></script>
     </head>
     <body>
+        <!--<div class="ui inverted labeled icon left inline vertical sidebar menu">-->
         <div class="ui inverted labeled icon left inline vertical sidebar menu">
             <a class="item">
                 <i class="home icon"></i>
@@ -112,12 +113,16 @@
                     };
 //todo title?
                     for (var i = 0; i < addresses.length; i++) {
+                        //todo infowindow
+                        var realExtra = Object.assign(extraMarkerParams, {
+                            infoWindowTitle : typeof addresses[i].infoWindowTitle !== "undefined" ? addresses[i].infoWindowTitle : "undefined"
+                        });
                         if (typeof addresses[i].lat === "undefined" || typeof addresses[i].lng === "undefined") {
                             gmi.searchAndMark({
                                         query: addresses[i].searchAddress
                                     },
                                     addresses[i].title,
-                                    extraMarkerParams,
+                                    realExtra,
                                     function(response) {
                                         if (response.status === gmi.service.places.PlacesServiceStatus.ZERO_RESULTS) {
                                             alert ('Address not found : ' + response.params.query);// TODO remove Alert whenever we have a Modal Component
@@ -135,7 +140,7 @@
                                         lng : parseFloat(addresses[i].lng)
                                     },
                                     addresses[i].title,
-                                    extraMarkerParams
+                                    realExtra
                             );
                         }
                     }
@@ -297,6 +302,7 @@
                 //mapCenter : {latitude : 49.611622, longitude : 6.131935}//Lux-city//todo make it work from there
             };
             var gmi;
+            var currentParams = {};
 
             (function(target, addresses, config, GoogleMapsInit, GoogleMapsIntegration){// asap
                 //GoogleMapsInit comes from googleMapsDefaultInit
@@ -306,6 +312,14 @@
                 });
             })(document.getElementById("map"), addresses, gmiConfig, GoogleMapsInit, GoogleMapsIntegration, loadEvents);
 
+            $('.filter').click(function(event) {
+                var params = {};
+                if ($(this).hasClass('provider')) {
+                    params.provider = $(this).attr('data-provider');
+                }
+                loadEvents(params);
+            });
+
             var loadEvents = function(params) {
                 $.get({
                     url : 'http://flashevents.flash-global.net/backend/api/events',
@@ -314,6 +328,7 @@
                     },//todo params//lol
                     dataType : 'json',
                     success : function(raw) {
+                        window.currentParams = params;
                         if (!raw.length) {
                             return false;
                         }
@@ -322,8 +337,8 @@
                         for (var i = 0; i < window.events.length - 1; i++) {
                             var event = window.events[i];
                             data.push({
-                                'title' : event.description || event.name ,
-                                'infoWindowTitle' : event.description || event.name,
+                                'title' :  event.eventLink || event.description || event.name ,
+                                'infoWindowTitle' : event.eventLink,
                                 'address' : event.address || undefined,
                                 'lat' : typeof event.address.latitude !== "undefined" ?  event.address.latitude : undefined,
                                 'lng' : typeof event.address.longitude !== "undefined" ?  event.address.longitude : undefined
