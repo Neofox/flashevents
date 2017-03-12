@@ -9,7 +9,7 @@
 <ul id="menu">
     <li><a href="http://flashevents.flash-global.net/event.php">Event</a></li>
     <li><a href="http://flashevents.flash-global.net/map.php">Map</a></li>
-    <li><a href="http://flashevents.flash-global.net/user.php">User</a></li>
+    <li><a href="http://flashevents.flash-global.net/user.php?id=11">User</a></li>
     <li><a href="http://flashevents.flash-global.net/friends.php">Friends</a></li>
     <li><a href="http://flashevents.flash-global.net/transport.php">Transport</a></li>
 </ul>
