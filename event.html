@@ -12,43 +12,79 @@
             $(document).ready(function(){
                 function getQueryParams() {
 
-                    var query = document.location.search;
-                    query = query.split('+').join(' ');
-
-                    var params = {},
-                        tokens,
-                        re = /[?&]?([^=]+)=([^&]*)/g;
-
-                    while (tokens = re.exec(query)) {
-                        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+                    var queryRaw = document.location.search.split('?');
+                    if (!queryRaw.length) {
+                        return false;
                     }
-
+                    var query = queryRaw[1].split('&');
+                    var params = {};
+                    for(var i=0; i<query.length; i++) {
+                        var tokens = query[i].split('=');
+                        params[decodeURIComponent(tokens[0])] = decodeURIComponent(tokens[1]);
+                    }
                     return params;
                 }
 
                 var getParameters = getQueryParams();
+                if (!getParameters || typeof getParameters['id'] === "undefined") {
+                    alert('wrong hole');
 
-                $.ajax({
-                    type: 'get',
-                    data: getParameters
-                }).fail(function(result) {
-                    return false;
-                }).done(function(result){
-                    return false;
-                });
+                }
+                else {
+                    load(getParameters['id']);
+                }
+                function load(id) {
+                    $.ajax({
+                        url : 'http://flashevents.flash-global.net/backend/api/events' + '/' + id,
+                        dataType : 'json'
+                    }).success(function(result) {
+                        var event = result[0];
+                        if (event.picture || false) {
+                            $("#picture").attr('src', event.picture);
+                            $("#picture").attr('alt', event.name || event.description);
+                            $("#picture").show();
+                        }
 
+                        if (event.eventLink || false) {
+                            $("#link").attr('href', event.eventLink);
+                            $("#link").text(event.eventLink);
+                            $("#link").removeClass('hidden');
+                        }
+
+                        if (result.address || false) {
+                            $("#address").text(result.address.streetName);
+                            $("#address").removeClass('hidden');
+                        }
+
+                        if (result.startDate || false) {
+                            $("#hourStart").text(event.startDate.data);//todo format date
+                            $("#hourStart").removeClass('hidden');
+                        }
+
+                        if (result.description || false) {
+                            $("#description").text(event.description);
+                            $("#description").removeClass('hidden');
+                        }
+
+                    }).fail(function(result) {
+                        alert('FATAL ERROR @lav');//dédicace var_dump//dédicace c'est gênant
+                    }).done(function(result){
+
+                    });
+                }
             });
+
         </script>
     </head>
     <body>
         <div class="ui container grid">
             <div class="">
-                <img class="ui image fluid" src="images/" alt="" />
+                <img id="picture" class="hidden ui image fluid" src="" alt="" />
             </div>
             <div class="ui list">
                 <div class="item">
                     <i class="marker icon"></i>
-                    <div class="content">
+                    <div class="content hidden" id="address">
                         27 Rue Philippe II,<br/>
                         L-2340 Luxembourg<br/>
                         Luxembourg
@@ -56,30 +92,24 @@
                 </div>
                 <div class="item">
                     <i class="wait icon"></i>
-                    <div class="content">
+                    <div class="content hidden">
                         2017-03-12 18:00
                     </div>
                 </div>
                 <div class="item">
-                    <i class="mail icon"></i>
-                    <div class="content">
-                        <a href="tel:+352 062 222">+352 062 222</a>
-                    </div>
-                </div>
-                <div class="item">
                     <i class="street view icon"></i>
-                    <div class="content">
+                    <div id="dist" class="hidden content">
                         6 km
                     </div>
                 </div>
                 <div class="item">
                     <i class="linkify icon"></i>
                     <div class="content">
-                        <a href="//city.snooze.pub">city.snooze.pub</a>
+                        <a id="link" class="hidden" href="//city.snooze.pub">city.snooze.pub</a>
                     </div>
                 </div>
             </div>
-            <div>
+            <div id="description" class="hidden">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Maecenas tempus lectus id urna porttitor, ut aliquam nulla mattis.
                 Phasellus eu suscipit sapien. Donec vel commodo neque,
