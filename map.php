@@ -347,7 +347,7 @@
                                     }
                                 }
                                 //newMarker.infoWindow.open(thisGMI.map, newMarker);
-                                window.location.href = 'http://dev.eventsflash.flash.global:5555/event.php?id=' + idEvent;
+                                window.location.href = 'http://flashevents.flash-global.net/event.html?id=' + idEvent;
                             });
                         }
                     }
@@ -484,7 +484,7 @@
                     div.appendChild(paragraph);
                 }
                 var eventUrl = document.createElement('div');
-                eventUrl.insertAdjacentHTML('beforeend', '<a href="http://dev.eventsflash.flash.global:5555/event.php?id=' + event.id + '">seemore</a>');
+                eventUrl.insertAdjacentHTML('beforeend', '<a href="http://flashevents.flash-global.net/event.html?id=' + event.id + '">seemore</a>');
                 div.appendChild(eventUrl);
                 eventFragment.appendChild(div);
                 if (event.picture) {
