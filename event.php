@@ -77,9 +77,9 @@
         </script>
     </head>
     <body>
-        <div class="ui container grid">
+        <div class="ui container grid centered">
             <div class="">
-                <img id="picture" class="hidden ui image fluid" src="" alt="" />
+                <img id="picture" class="hidden ui image fluid" src="" alt="" style="max-width:480px;"/>
             </div>
             <div class="ui list">
                 <div class="item">
