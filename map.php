@@ -2,19 +2,110 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>Title</title>
+        <title>Find an event</title>
+        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css" />
         <link rel="stylesheet" type="text/css" href="css/main.css" />
         <style>
-            /*
-            .map_filters_container{
-                position:absolute;
-                top:0;
-                left:0;
+            #header
+            {
                 width:100%;
-                height:100%;
-                z-index:99;
-            }*/
+                height:50px;
+                background-color:#555;
+                position: relative;
+                z-index:2;
+            }
+
+            label[for=menuToggle]{
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 50px;
+                height: 50px;
+                padding: 14px 10px;
+            }
+
+            label[for=menuToggle] span{
+                display: block;
+                width:100%;
+                border: 2px solid #FFF;
+                -webkit-border-radius:2px;
+                -moz-border-radius:2px;
+                -ms-border-radius:2px;
+                -o-border-radius:2px;
+                border-radius:2px;
+            }
+
+            label[for=menuToggle] span + span{
+                margin-top: 4px;
+            }
+
+            #menuToggle {
+                display: inline-block;
+                position: absolute;
+                top: 12px;
+                left: 12px;
+            }
+
+            #menuToggle input
+            {
+                display: block;
+                width: 40px;
+                height: 32px;
+                position: absolute;
+                cursor: pointer;
+                opacity: 0;
+                z-index: 2;
+                -webkit-touch-callout: none;
+            }
+
+            #menuToggle span
+            {
+                display: block;
+                width: 33px;
+                height: 4px;
+                margin-bottom: 5px;
+                position: relative;
+
+                background: #cdcdcd;
+                border-radius: 3px;
+
+                z-index: 1;
+            }
+
+            #menu {
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                padding: 100px 50px 50px 50px;
+                max-width: 320px;
+                background: #ededed;
+                box-sizing: border-box;
+                -webkit-transition:.2s;
+                -moz-transition:.2s;
+                -ms-transition:.2s;
+                -o-transition:.2s;
+                transition:.2s;
+                z-index: 1;
+            }
+
+            #menuToggle:checked + #menu{
+                left: 0;
+            }
+
+            #menu li
+            {
+                padding: 10px 0;
+                font-size: 22px;
+            }
+
+            #menuToggle input:checked ~ ul
+            {
+                transform: scale(1.0, 1.0);
+                opacity: 1;
+            }
 
             #toggle_filters:checked + .panel_right_slide{
                 right: 0%;
@@ -176,7 +267,6 @@
                                             alert ('Address not found : ' + response.params.query);// TODO remove Alert whenever we have a Modal Component
                                         }
                                         else {
-                                            console.log(response, 'debugging PlacesService bad failure, the response contains the query params');
                                             alert("Something went wrong, please try later");// TODO remove Alert whenever we have a Modal Component
                                         }
                                     }
@@ -188,7 +278,8 @@
                                         lng : parseFloat(addresses[i].lng)
                                     },
                                     addresses[i].title,
-                                    realExtra
+                                    realExtra,
+                                    addresses[i]
                             );
                         }
                     }
@@ -223,7 +314,7 @@
                 }
 
                 /* adds a preconfigured marker at position with title on this.map , additionalParams being optional*/
-                GoogleMapsIntegration.prototype.addMarker = function(position, title, additionalParams) {
+                GoogleMapsIntegration.prototype.addMarker = function(position, title, additionalParams, addresses) {
                     var defaultParams = {
                         'position': position,
                         'map': this.map,
@@ -247,14 +338,16 @@
                             newMarker.infoWindow = new this.service.InfoWindow({
                                 content: additionalParams.infoWindowTitle ? additionalParams.infoWindowTitle : title
                             });
-                            this.service.event.addListener(newMarker, 'click', function() {
+                            var idEvent = addresses.idEvent;
+                            this.service.event.addListener(newMarker, 'click', function(event) {
                                 for (var markerIndex = 0;  markerIndex < gmi.markers.length; markerIndex++) {
                                     if (gmi.markers[markerIndex].infoWindow) {
                                         // autoclose anything opened. Ruled out deleting the key, checking on active element, or closing an opened one on click instead of reopening
-                                        gmi.markers[markerIndex].infoWindow.close();
+                                        //gmi.markers[markerIndex].infoWindow.close();
                                     }
                                 }
-                                newMarker.infoWindow.open(thisGMI.map, newMarker);
+                                //newMarker.infoWindow.open(thisGMI.map, newMarker);
+                                window.location.href = 'http://dev.eventsflash.flash.global:5555/event.php?id=' + idEvent;
                             });
                         }
                     }
@@ -373,8 +466,7 @@
                 var eventFragment = document.createDocumentFragment();
                 var div = document.createElement('div');
                 div.className = 'marker_info_window';
-                if (event.picture) {
-                    console.log(event.picture);
+                if (event.picture !== undefined) {
                     var pic = document.createElement('img');
                     pic.setAttribute('src', decodeURIComponent(event.src));
                     pic.setAttribute('alt', event.name || '');
@@ -391,9 +483,12 @@
                     paragraph.insertAdjacentHTML('beforeend', event.description.substring(0, 100));
                     div.appendChild(paragraph);
                 }
+                var eventUrl = document.createElement('div');
+                eventUrl.insertAdjacentHTML('beforeend', '<a href="http://dev.eventsflash.flash.global:5555/event.php?id=' + event.id + '">seemore</a>');
+                div.appendChild(eventUrl);
                 eventFragment.appendChild(div);
                 if (event.picture) {
-                    console.log(eventFragment);
+                    //console.log(eventFragment);
                 }
 
                 return eventFragment;
@@ -421,6 +516,7 @@
                                 'title' :  event.eventLink || event.description || event.name ,
                                 'infoWindowTitle' : generateDescription(event),//event.description || event.name,
                                 'address' : event.address || undefined,
+                                'idEvent' : event.id,
                                 'lat' : typeof event.address.latitude !== "undefined" ?  event.address.latitude : undefined,
                                 'lng' : typeof event.address.longitude !== "undefined" ?  event.address.longitude : undefined
                             });
