@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>Title</title>
+        <title>FlashEvents - Connexion</title>
         <link rel="stylesheet" href="css/main.css" />
         <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css" />
         <style media="screen">
@@ -24,28 +24,52 @@
         <script type="text/javascript">
             $(document).ready(function(){
                 console.log("ready");
+
+                $('form').submit(function(event){
+                    var _this = $(this);
+                    var data = _this.serialize();
+                    var method = _this.get(0).method;
+                    var url = _this.get(0).action;
+
+                    $.ajax({
+                        url: url,
+                        type: method,
+                        data: data
+                    })
+                    .fail(function(result){
+                        alert('fuck you');
+                    })
+                    .done(function(result){
+                        window.location.replace("http://localhost:5555/map.html");
+                    });
+
+                     event.preventDefault();
+                     return false;
+                });
+
             });
         </script>
     </head>
     <body class="login">
         <div class="container ui center aligned">
-            <div class="ui form">
+            <form class="ui form" action="http://flashevents.flash-global.net/backend/login" data-redirection="map.html" method="POST">
+                <div class="message"></div>
                 <img id="logo" class="" src="images/logo.svg" alt=""/>
                 <div class="field ui left icon input fluid">
                     <i class="icon user"></i>
-                    <input id="login_username" placeholder="Username" type="text" name="login_username" />
+                    <input id="email" placeholder="Username" type="text" name="email" />
                 </div>
                 <div class="field ui left icon input fluid">
                     <i class="lock icon"></i>
-                    <input id="login_password" placeholder="Password" type="password" name="login_password" />
+                    <input id="password" placeholder="Password" type="password" name="password" />
                 </div>
                 <div class="field">
-                    <div class="ui primary submit button fluid">
+                    <button type="submit" class="ui primary submit button fluid">
                         Sign in
-                    </div>
+                    </button>
                 </div>
                 <a href="#">Need help ?</a>
-            </div>
+            </form>
             <div class="ui horizontal divider">or</div>
             <a href="#">Connect with facebook</a>
             <div class="ui horizontal divider"></div>
