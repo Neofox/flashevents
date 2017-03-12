@@ -161,12 +161,16 @@
                     };
 //todo title?
                     for (var i = 0; i < addresses.length; i++) {
+                        //todo infowindow
+                        var realExtra = Object.assign(extraMarkerParams, {
+                            infoWindowTitle : typeof addresses[i].infoWindowTitle !== "undefined" ? addresses[i].infoWindowTitle : "undefined"
+                        });
                         if (typeof addresses[i].lat === "undefined" || typeof addresses[i].lng === "undefined") {
                             gmi.searchAndMark({
                                         query: addresses[i].searchAddress
                                     },
                                     addresses[i].title,
-                                    extraMarkerParams,
+                                    realExtra,
                                     function(response) {
                                         if (response.status === gmi.service.places.PlacesServiceStatus.ZERO_RESULTS) {
                                             alert ('Address not found : ' + response.params.query);// TODO remove Alert whenever we have a Modal Component
@@ -184,7 +188,7 @@
                                         lng : parseFloat(addresses[i].lng)
                                     },
                                     addresses[i].title,
-                                    extraMarkerParams
+                                    realExtra
                             );
                         }
                     }
@@ -342,10 +346,11 @@
                 MAPFILES_URL: "http://maps.gstatic.com/intl/en_us/mapfiles/",
                 zoomFactor : 9,
                 draggable: false,
-                mapCenter: false,
+                mapCenter: false
                 //mapCenter : {latitude : 49.611622, longitude : 6.131935}//Lux-city//todo make it work from there
             };
             var gmi;
+            var currentParams = {};
 
             (function(target, addresses, config, GoogleMapsInit, GoogleMapsIntegration){// asap
                 //GoogleMapsInit comes from googleMapsDefaultInit
@@ -355,6 +360,46 @@
                 });
             })(document.getElementById("map"), addresses, gmiConfig, GoogleMapsInit, GoogleMapsIntegration, loadEvents);
 
+            $('.filter').click(function(event) {
+                var params = {};
+                if ($(this).hasClass('provider')) {
+                    params.provider = $(this).attr('data-provider');
+                }
+                loadEvents(params);
+            });
+          
+            function generateDescription(event) {
+                // TODO move this template function to an external file
+                var eventFragment = document.createDocumentFragment();
+                var div = document.createElement('div');
+                div.className = 'marker_info_window';
+                if (event.picture) {
+                    console.log(event.picture);
+                    var pic = document.createElement('img');
+                    pic.setAttribute('src', decodeURIComponent(event.src));
+                    pic.setAttribute('alt', event.name || '');
+                    div.appendChild(document.createElement('div').appendChild(pic));
+                }
+                if (event.eventLink) {
+                    var anchor = document.createElement('A');
+                    anchor.setAttribute('href', event.eventLink);
+                    anchor.textContent = event.name || event.eventLink;
+                    div.appendChild(document.createElement('h3').appendChild(anchor))
+                }
+                if (event.description) {
+                    var paragraph = document.createElement('div');
+                    paragraph.insertAdjacentHTML('beforeend', event.description.substring(0, 100));
+                    div.appendChild(paragraph);
+                }
+                eventFragment.appendChild(div);
+                if (event.picture) {
+                    console.log(eventFragment);
+                }
+
+                return eventFragment;
+            }
+
+
             var loadEvents = function(params) {
                 $.get({
                     url : 'http://flashevents.flash-global.net/backend/api/events',
@@ -363,6 +408,7 @@
                     },//todo params//lol
                     dataType : 'json',
                     success : function(raw) {
+                        window.currentParams = params;
                         if (!raw.length) {
                             return false;
                         }
@@ -370,13 +416,15 @@
                         var data = [];
                         for (var i = 0; i < window.events.length - 1; i++) {
                             var event = window.events[i];
+
                             data.push({
-                                'title' : event.description || event.name ,
-                                'infoWindowTitle' : event.description || event.name,
+                                'title' :  event.eventLink || event.description || event.name ,
+                                'infoWindowTitle' : generateDescription(event),//event.description || event.name,
                                 'address' : event.address || undefined,
                                 'lat' : typeof event.address.latitude !== "undefined" ?  event.address.latitude : undefined,
                                 'lng' : typeof event.address.longitude !== "undefined" ?  event.address.longitude : undefined
                             });
+
                         }
                         if (data.length) {
                             gmi.clearMap();
