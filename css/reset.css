@@ -12,3 +12,17 @@ a{
 a:hover{
     color: tomato;
 }
+
+label{
+    display: block;
+    cursor:pointer;
+}
+
+.hidden{
+    display: none;
+}
+
+ul{
+    padding:0;
+    list-style: none;
+}

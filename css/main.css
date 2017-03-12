@@ -1,6 +1,6 @@
-@import reset.css;
-@import common.css;
-@import colors.css;
-@import fonts.css;
-@import z-index.css;
-@import animations.css;
+@import url(reset.css);
+@import url(common.css);
+@import url(colors.css);
+@import url(fonts.css);
+@import url(z-index.css);
+@import url(animations.css);
