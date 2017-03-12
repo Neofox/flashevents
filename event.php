@@ -1,120 +1,161 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>Event</title>
-        <link rel="stylesheet" href="css/main.css" />
-        <link rel="stylesheet" href="css/template/event.css" />
-        <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css" />
-        <script src="https://code.jquery.com/jquery-1.12.4.min.js" type="text/javascript"></script>
-        <script src="semantic/dist/semantic.min.js" type="text/javascript"></script>
-        <script type="text/javascript">
-            $(document).ready(function(){
-                function getQueryParams() {
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-                    var queryRaw = document.location.search.split('?');
-                    if (!queryRaw.length) {
-                        return false;
-                    }
-                    var query = queryRaw[1].split('&');
-                    var params = {};
-                    for(var i=0; i<query.length; i++) {
-                        var tokens = query[i].split('=');
-                        params[decodeURIComponent(tokens[0])] = decodeURIComponent(tokens[1]);
-                    }
-                    return params;
-                }
+    <title>Event details</title>
 
-                var getParameters = getQueryParams();
-                if (!getParameters || typeof getParameters['id'] === "undefined") {
-                    alert('wrong hole');
+    <meta name="author" content="Flashevents">
 
-                }
-                else {
-                    load(getParameters['id']);
-                }
-                function load(id) {
-                    $.ajax({
-                        url : 'http://flashevents.flash-global.net/backend/api/events' + '/' + id,
-                        dataType : 'json'
-                    }).success(function(result) {
-                        var event = result[0];
-                        if (event.picture || false) {
-                            $("#picture").attr('src', event.picture);
-                            $("#picture").attr('alt', event.name || event.description);
-                            $("#picture").show();
-                        }
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 
-                        if (event.eventLink || false) {
-                            $("#link").attr('href', event.eventLink);
-                            $("#link").text(event.eventLink);
-                            $("#link").removeClass('hidden');
-                        }
+  </head>
+  <body>
 
-                        if (result.address || false) {
-                            $("#address").text(result.address.streetName);
-                            $("#address").removeClass('hidden');
-                        }
+    <div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+				<div class="navbar-header">
+					 
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						 <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+					</button> <a class="navbar-brand" href="#">Brand</a>
+				</div>
+				
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li class="active">
+							<a href="#">Link</a>
+						</li>
+						<li>
+							<a href="#">Link</a>
+						</li>
+						<li class="dropdown">
+							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<strong class="caret"></strong></a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="#">Action</a>
+								</li>
+								<li>
+									<a href="#">Another action</a>
+								</li>
+								<li>
+									<a href="#">Something else here</a>
+								</li>
+								<li class="divider">
+								</li>
+								<li>
+									<a href="#">Separated link</a>
+								</li>
+								<li class="divider">
+								</li>
+								<li>
+									<a href="#">One more separated link</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+					<form class="navbar-form navbar-left" role="search">
+						<div class="form-group">
+							<input type="text" class="form-control">
+						</div> 
+						<button type="submit" class="btn btn-default">
+							Submit
+						</button>
+					</form>
+					<ul class="nav navbar-nav navbar-right">
+						<li>
+							<a href="#">Link</a>
+						</li>
+						<li class="dropdown">
+							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<strong class="caret"></strong></a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="#">Action</a>
+								</li>
+								<li>
+									<a href="#">Another action</a>
+								</li>
+								<li>
+									<a href="#">Something else here</a>
+								</li>
+								<li class="divider">
+								</li>
+								<li>
+									<a href="#">Separated link</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+				
+			</nav>
+		</div>
+	</div>
 
-                        if (result.startDate || false) {
-                            $("#hourStart").text(event.startDate.data);//todo format date
-                            $("#hourStart").removeClass('hidden');
-                        }
+	<div class="row">
+		<div class="col-md-12"><br><br><br></div>
+		<div class="col-md-12">
+			<h2 id="title" class="text-primary">
+				Event details
+			</h2>
+			<img alt="event image" src="http://lorempixel.com/140/140/" class="img-thumbnail">
+			<address>
+				<strong id="event-name">Twitter, Inc.</strong>
+				<br>
+				<span id="event-street-number">795</span>
+				<span id="event-street-name">Folsom Ave, Suite 600</span><br>
+				<span id="event-city">San Francisco</span>,
+				<span id="event-zipcode">CA 94107</span><br>
+			</address>
+			<dl id="event-description">
+			</dl>
+		</div>
+	</div>
+</div>
 
-                        if (result.description || false) {
-                            $("#description").text(event.description);
-                            $("#description").removeClass('hidden');
-                        }
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/scripts.js"></script>
+	<script type="application/javascript">
+        function findGetParameter(parameterName) {
+            var result = null,
+                tmp = [];
+            location.search
+                .substr(1)
+                .split("&")
+                .forEach(function (item) {
+                    tmp = item.split("=");
+                    if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+                });
+            return result;
+        }
 
-                    }).fail(function(result) {
-                        alert('FATAL ERROR @lav');//dédicace var_dump//dédicace c'est gênant
-                    }).done(function(result){
+        var id = findGetParameter('id');
 
-                    });
-                }
-            });
+        $.ajax({
+            url: 'http://flashevents.flash-global.net/backend/api/events/' + id,
+            complete : function(data){
+                console.log(data.responseJSON[0]);
+                var response = data.responseJSON[0];
 
-        </script>
-    </head>
-    <body>
-        <div class="ui container grid">
-            <div class="">
-                <img id="picture" class="hidden ui image fluid" src="" alt="" />
-            </div>
-            <div class="ui list">
-                <div class="item">
-                    <i class="marker icon"></i>
-                    <div class="content hidden" id="address">
-                        27 Rue Philippe II,<br/>
-                        L-2340 Luxembourg<br/>
-                        Luxembourg
-                    </div>
-                </div>
-                <div class="item">
-                    <i class="wait icon"></i>
-                    <div class="content hidden">
-                        2017-03-12 18:00
-                    </div>
-                </div>
-                <div class="item">
-                    <i class="street view icon"></i>
-                    <div id="dist" class="hidden content">
-                        6 km
-                    </div>
-                </div>
-                <div class="item">
-                    <i class="linkify icon"></i>
-                    <div class="content">
-                        <a id="link" class="hidden" href="//city.snooze.pub">city.snooze.pub</a>
-                    </div>
-                </div>
-            </div>
-            <div id="description" class="hidden">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Maecenas tempus lectus id urna porttitor, ut aliquam nulla mattis.
-                Phasellus eu suscipit sapien. Donec vel commodo neque,
-                ac blandit dolor.
-            </div>
-        </div>
-    </body>
+				//$("#title").html(response.name + "  details");
+				//$(".img-thumbnail").attr('src', response.picture)
+
+				$("#event-name").html(response.name);
+				$("#event-city").html(response.address.city);
+				$("#event-street-name").html(response.address.streetName);
+				$("#event-street-number").html(response.address.streetNumber);
+				$("#event-zipcode").html(response.address.zipCode);
+				
+				$("#event-description").html(response.description);
+
+            }
+        });
+	</script>
+  </body>
 </html>
