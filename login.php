@@ -40,7 +40,7 @@
                         alert('fuck you');
                     })
                     .done(function(result){
-                        window.location.replace("http://localhost:5555/map.html");
+                        window.location.replace("http://localhost:5555/map.php");
                     });
 
                      event.preventDefault();

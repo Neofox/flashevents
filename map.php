@@ -6,6 +6,7 @@
         <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css" />
         <link rel="stylesheet" type="text/css" href="css/main.css" />
         <style>
+            /*
             .map_filters_container{
                 position:absolute;
                 top:0;
@@ -13,11 +14,15 @@
                 width:100%;
                 height:100%;
                 z-index:99;
+            }*/
+
+            #toggle_filters:checked + .panel_right_slide{
+                right: 0%;
             }
 
             label[for=toggle_filters]{
                 position: absolute;
-                top:0;
+                top:50px;
                 right:0;
                 padding:1.2em 1.4em;
                 background:#2185d0;
@@ -27,16 +32,17 @@
 
             .panel_right_slide{
                 position: absolute;
-                top:0;
-                right:0;
-                padding:50px;
+                top: 50px;
+                right: -100%;
+                padding: 50px;
                 display: block;
                 max-width: 320px;
-                width:100%;
-                height:100%;
+                width: 100%;
+                height: 100%;
                 background: #FFF;
-                box-sizing:border-box;
-                -webkit-transition:.2s;
+                box-sizing: border-box;
+                -webkit-transition: .2s;
+                z-index: 99;
             }
 
             .panel_right_slide li{
@@ -56,10 +62,6 @@
                 top:12px;
                 right:0;
             }
-
-            #toggle_filters:checked + .map_filters_container>.panel_right_slide{
-                right:-100%;
-            }
         </style>
         <script src="https://code.jquery.com/jquery-1.12.4.min.js" type="text/javascript"></script>
         <script src="semantic/dist/semantic.min.js" type="text/javascript"></script>
@@ -70,89 +72,50 @@
         </script>
     </head>
     <body>
+        <?php include_once 'header.php'; ?>
         <label for="toggle_filters">Filters</label>
         <input id="toggle_filters" class="hidden" type="checkbox" />
-        <div class="map_filters_container">
-            <div class="panel_right_slide">
-                <ul>
-                    <li>
-                        <label for="toggle_filter_university">
-                            <i class="icon university"></i>
-                            Culture
-                        </label>
-                        <input id="toggle_filter_university" type="checkbox"/>
-                    </li>
-                    <li>
-                        <label for="toggle_filter_food">
-                            <i class="icon food"></i>
-                            Restaurant
-                        </label>
-                        <input id="toggle_filter_food" type="checkbox"/>
-                    </li>
-                    <li>
-                        <label for="toggle_filter_sport">
-                            <i class="icon heartbeat"></i>
-                            Sport
-                        </label>
-                        <input id="toggle_filter_sport" type="checkbox"/>
-                    </li>
-                    <li>
-                        <label for="toggle_filter_cocktail">
-                            <i class="icon cocktail"></i>
-                            Nightlight
-                        </label>
-                        <input id="toggle_filter_cocktail" type="checkbox"/>
-                    </li>
-                    <li>
-                        <label for="toggle_filter_users">
-                            <i class="icon users"></i>
-                            Meetups
-                        </label>
-                        <input id="toggle_filter_users" type="checkbox"/>
-                    </li>
-                </ul>
-            </div>
+        <div class="panel_right_slide">
+            <ul>
+                <li>
+                    <label for="toggle_filter_university">
+                        <i class="icon university"></i>
+                        Culture
+                    </label>
+                    <input id="toggle_filter_university" type="checkbox"/>
+                </li>
+                <li>
+                    <label for="toggle_filter_food">
+                        <i class="icon food"></i>
+                        Restaurant
+                    </label>
+                    <input id="toggle_filter_food" type="checkbox"/>
+                </li>
+                <li>
+                    <label for="toggle_filter_sport">
+                        <i class="icon heartbeat"></i>
+                        Sport
+                    </label>
+                    <input id="toggle_filter_sport" type="checkbox"/>
+                </li>
+                <li>
+                    <label for="toggle_filter_cocktail">
+                        <i class="icon cocktail"></i>
+                        Nightlight
+                    </label>
+                    <input id="toggle_filter_cocktail" type="checkbox"/>
+                </li>
+                <li>
+                    <label for="toggle_filter_users">
+                        <i class="icon users"></i>
+                        Meetups
+                    </label>
+                    <input id="toggle_filter_users" type="checkbox"/>
+                </li>
+            </ul>
         </div>
-        <div id='map' style="min-width:100%;min-height:80%;"></div>
-        <!-- <div class="ui top attached demo menu">
-            <a class="item">
-                <i class="sidebar icon"></i>
-                Menu
-            </a>
-        </div>
-        <div class="ui bottom attached segment pushable">
-            <div class="ui inverted labeled icon left inline vertical sidebar menu">
-                <a class="item">
-                    <i class="home icon"></i>
-                    Home
-                </a>
-                <a class="item">
-                    <i class="block layout icon"></i>
-                    Topics
-                </a>
-                <a class="item">
-                    <i class="smile icon"></i>
-                    Friends
-                </a>
-                <a class="item">
-                    <i class="calendar icon"></i>
-                    History
-                </a>
-            </div>
-            <div class="pusher">
-                <div class="ui basic segment">
-
-                 </div>
-            </div>
-        </div>-->
+        <div id='map' style="min-width:100%;min-height:100%;"></div>
         <script type="text/javascript">
-            /*$('.context.example .ui.sidebar')
-                    .sidebar({
-                        context: $('.context.example .bottom.segment')
-                    })
-                    .sidebar('attach events', '.context.example .menu .item')
-            ;*/
-
             var GoogleMapsInit = (function(){
                 "use strict";
 
