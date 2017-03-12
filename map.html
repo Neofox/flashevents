@@ -9,8 +9,64 @@
         <script src="semantic/dist/semantic.min.js" type="text/javascript"></script>
     </head>
     <body>
-        <div id='map' style='width:1024px;float:left; height:640px;'></div>
+        <div class="ui inverted labeled icon left inline vertical sidebar menu">
+            <a class="item">
+                <i class="home icon"></i>
+                Home
+            </a>
+            <a class="item">
+                <i class="block layout icon"></i>
+                Topics
+            </a>
+            <a class="item">
+                <i class="smile icon"></i>
+                Friends
+            </a>
+            <a class="item">
+                <i class="calendar icon"></i>
+                History
+            </a>
+        </div>
+        <div id='map' style="min-width:100%;min-height:80%;"></div>
+        <!-- <div class="ui top attached demo menu">
+            <a class="item">
+                <i class="sidebar icon"></i>
+                Menu
+            </a>
+        </div>
+        <div class="ui bottom attached segment pushable">
+            <div class="ui inverted labeled icon left inline vertical sidebar menu">
+                <a class="item">
+                    <i class="home icon"></i>
+                    Home
+                </a>
+                <a class="item">
+                    <i class="block layout icon"></i>
+                    Topics
+                </a>
+                <a class="item">
+                    <i class="smile icon"></i>
+                    Friends
+                </a>
+                <a class="item">
+                    <i class="calendar icon"></i>
+                    History
+                </a>
+            </div>
+            <div class="pusher">
+                <div class="ui basic segment">
+
+                 </div>
+            </div>
+        </div>-->
         <script type="text/javascript">
+            /*$('.context.example .ui.sidebar')
+                    .sidebar({
+                        context: $('.context.example .bottom.segment')
+                    })
+                    .sidebar('attach events', '.context.example .menu .item')
+            ;*/
+
             var GoogleMapsInit = (function(){
                 "use strict";
 
@@ -42,40 +98,6 @@
                             }
                     );
 
-                    /*var extraMarkerParams = {
-                        draggable: typeof config.draggable !== "undefined" ? config.draggable : true,
-                        center: typeof config.center !== "undefined" ? config.center : true,
-                        infoWindow : typeof config.infoWindow !== "undefined" ? config.infoWindow : true
-                    };
-
-                    for (var i = 0; i < addresses.length; i++) {
-                        if (typeof addresses[i].lat === "undefined" || typeof addresses[i].lng === "undefined") {
-                            gmi.searchAndMark({
-                                        query: addresses[i].searchAddress
-                                    },
-                                    addresses[i].title,
-                                    extraMarkerParams,
-                                    function(response) {
-                                        if (response.status === gmi.service.places.PlacesServiceStatus.ZERO_RESULTS) {
-                                            alert ('Address not found : ' + response.params.query);// TODO remove Alert whenever we have a Modal Component
-                                        }
-                                        else {
-                                            console.log(response, 'debugging PlacesService bad failure, the response contains the query params');
-                                            alert("Something went wrong, please try later");// TODO remove Alert whenever we have a Modal Component
-                                        }
-                                    }
-                            );
-                        }
-                        else {
-                            gmi.addMarker({
-                                        lat : parseFloat(addresses[i].lat),
-                                        lng : parseFloat(addresses[i].lng)
-                                    },
-                                    addresses[i].title,
-                                    extraMarkerParams
-                            );
-                        }
-                    }*/
                     addAdresses(gmi, addresses, config);
 
                     return gmi;
@@ -86,8 +108,9 @@
                         draggable: typeof config.draggable !== "undefined" ? config.draggable : true,
                         center: typeof config.center !== "undefined" ? config.center : true,
                         infoWindow : typeof config.infoWindow !== "undefined" ? config.infoWindow : true
+                        //infoWindowTitle : typeof config.infoWindowTitle !== "undefined" ? config.infoWindowTitle : undefined
                     };
-
+//todo title?
                     for (var i = 0; i < addresses.length; i++) {
                         if (typeof addresses[i].lat === "undefined" || typeof addresses[i].lng === "undefined") {
                             gmi.searchAndMark({
@@ -144,8 +167,7 @@
                     this.directionsDisplay.setMap(this.map);
 
                     this.placesSearch = new this.service.places.PlacesService(this.map);
-
-                };
+                }
 
                 /* adds a preconfigured marker at position with title on this.map , additionalParams being optional*/
                 GoogleMapsIntegration.prototype.addMarker = function(position, title, additionalParams) {
@@ -165,12 +187,12 @@
 
                     if (newMarker && additionalParams) {
                         if (additionalParams.center) {
-                            this.map.setCenter(position);
+                            //this.map.setCenter(position);//fixme ignored
                         }
                         if (additionalParams.infoWindow) {
                             var thisGMI = this;
                             newMarker.infoWindow = new this.service.InfoWindow({
-                                content: title
+                                content: additionalParams.infoWindowTitle ? additionalParams.infoWindowTitle : title
                             });
                             this.service.event.addListener(newMarker, 'click', function() {
                                 for (var markerIndex = 0;  markerIndex < gmi.markers.length; markerIndex++) {
@@ -197,7 +219,7 @@
 
                 GoogleMapsIntegration.prototype.clearMap = function() {
                     // duh
-                    for (var i = this.markers.length - 1; i = 0; i--) {
+                    for (var i = this.markers.length - 1; i > 0; i--) {
                         this.cancelLast();
                     }
                 };
@@ -266,10 +288,13 @@
             //var placesLink = "https://maps.googleapis.com/maps/api/js?v=3&library=places";
             var placesLink = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCfqJpSQKXiigevCabsliVlFFvkgTYuNfM&libraries=places";
             var addresses = [];
+            var events = {};
             var gmiConfig = {
                 MAPFILES_URL: "http://maps.gstatic.com/intl/en_us/mapfiles/",
                 zoomFactor : 9,
-                mapCenter : {latitude : 49.611622, longitude : 6.131935}//Lux-city//todo make it work from there
+                draggable: false,
+                mapCenter: false,
+                //mapCenter : {latitude : 49.611622, longitude : 6.131935}//Lux-city//todo make it work from there
             };
             var gmi;
 
@@ -282,13 +307,28 @@
             })(document.getElementById("map"), addresses, gmiConfig, GoogleMapsInit, GoogleMapsIntegration, loadEvents);
 
             var loadEvents = function(params) {
-                $.ajax({
-                    //type : 'POST',
+                $.get({
                     url : 'http://flashevents.flash-global.net/backend/api/events',
-                    data : {},//todo params//lol
+                    data : params || {
+                        limit : 15
+                    },//todo params//lol
+                    dataType : 'json',
                     success : function(raw) {
-                        data = JSON.parse(raw);
-                        console.log(data);
+                        if (!raw.length) {
+                            return false;
+                        }
+                        window.events = raw;
+                        var data = [];
+                        for (var i = 0; i < window.events.length - 1; i++) {
+                            var event = window.events[i];
+                            data.push({
+                                'title' : event.description || event.name ,
+                                'infoWindowTitle' : event.description || event.name,
+                                'address' : event.address || undefined,
+                                'lat' : typeof event.address.latitude !== "undefined" ?  event.address.latitude : undefined,
+                                'lng' : typeof event.address.longitude !== "undefined" ?  event.address.longitude : undefined
+                            });
+                        }
                         if (data.length) {
                             gmi.clearMap();
                             GoogleMapsInit.addAdresses(window.gmi, data, window.gmiConfig);
