@@ -37,10 +37,10 @@
                         data: data
                     })
                     .fail(function(result){
-                        alert('fuck you');
+                        alert('wrong password or username');
                     })
                     .done(function(result){
-                        window.location.replace("http://localhost:5555/map.php");
+                        window.location.replace("http://flashevents.flash-global.net/map.php");
                     });
 
                      event.preventDefault();
